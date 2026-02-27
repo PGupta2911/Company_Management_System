@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Dashboard</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <h2>My Salary Slips</h2>
+
+  <button id="logoutBtn">Logout</button>
+
+  <table border="1" width="100%" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Year</th>
+        <th>Net Salary</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="payrollTable">
+      <tr><td colspan="5">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <script type="module" src="/static/js/employee_dashboard.js"></script>
+</body>
+</html>

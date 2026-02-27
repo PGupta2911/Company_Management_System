@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HR - Employees</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script type="module" src="{% static 'js/hr_employee_management.js' %}"></script>
+</head>
+<body>
+  <div class="layout">
+    <div class="sidebar">
+      <h2>HR Panel</h2>
+      <a href="/hr/dashboard/">Dashboard</a>
+      <a class="active" href="/hr/employees/">Employees</a>
+      <a href="/hr/payrolls/">Payrolls</a>
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+
+    <div class="main">
+      <h2>Employees</h2>
+
+      <button id="showAddEmployeeBtn">+ Add Employee</button>
+
+      <table border="1" width="100%" style="margin-top:20px;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="employeeTable">
+          <tr><td colspan="4">Loading...</td></tr>
+        </tbody>
+      </table>
+      <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <h3>Add Employee</h3>
+
+            <form id="addEmployeeForm">
+            <input type="text" id="empFullName" placeholder="Full Name" required />
+            <input type="email" id="empEmail" placeholder="Email" required />
+            <input type="password" id="empPassword" placeholder="Temporary Password" required />
+            <input type="text" id="empPosition" placeholder="Position" required />
+            <input type="number" id="empBaseSalary" placeholder="Base Salary" required />
+            <input type="number" id="empAllowance" placeholder="Allowance" value="0" />
+            <input type="number" id="empDeduction" placeholder="Deduction" value="0" />
+
+            <div class="modal-actions">
+                <button type="submit">Save</button>
+                <button type="button" id="closeModalBtn">Cancel</button>
+            </div>
+            </form>
+        </div>
+        </div>
+    </div>
+  </div>
+</body>
+</html>

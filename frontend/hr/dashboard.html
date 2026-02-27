@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script type="module" src="{% static 'js/hr_dashboard.js' %}"></script>
+</head>
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <h2>HR Panel</h2>
+            <a class="active" href="/hr/dashboard/">Dashboard</a>
+            <a href="/hr/employees/">Employees</a>
+            <a href="/hr/payrolls/">Payrolls</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div>Dashboard</div>
+                <div id="userInfo"></div>
+            </div>
+
+            <div class="cards">
+                <div class="card">
+                    <h3>Organization</h3>
+                    <p id="orgName">Loading...</p>
+                </div>
+
+                <div class="card">
+                    <h3>Total Employees</h3>
+                    <p id="TotalEmployees">-</p>
+                </div>
+
+                <div class="card">
+                    <h3>Pending Payrolls</h3>
+                    <p id="pendingPayrolls">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

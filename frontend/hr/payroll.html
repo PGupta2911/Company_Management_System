@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HR - Payrolls</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/static/css/style.css" />
+
+  <!-- (Optional) Basic inline style for modal if not in CSS -->
+  <style>
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 320px;
+    }
+    .modal-box input, .modal-box select {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+    }
+    .modal-box button {
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>HR Panel</h2>
+      <nav>
+        <a href="/hr/dashboard/">Dashboard</a>
+        <a href="/hr/employees/">Employees</a>
+        <a class="active" href="/hr/payrolls/">Payrolls</a>
+        <button id="logoutBtn">Logout</button>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+      <div class="header-row">
+        <h2>Payrolls</h2>
+        <button id="showGenerateBtn">+ Generate Payroll</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Employee</th>
+            <th>Month</th>
+            <th>Year</th>
+            <th>Net Salary</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="payrollTable">
+          <tr>
+            <td colspan="7">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+
+  <!-- Generate Payroll Modal -->
+  <div id="generateModal" class="modal-backdrop">
+    <div class="modal-box">
+      <h3>Generate Payroll</h3>
+      <form id="generateForm">
+        <select id="payEmployee" required>
+          <option value="">Select Employee</option>
+        </select>
+
+        <input type="number" id="payMonth" placeholder="Month (1-12)" min="1" max="12" required />
+        <input type="number" id="payYear" placeholder="Year (e.g. 2026)" required />
+
+        <div style="margin-top: 10px;">
+          <button type="submit">Generate</button>
+          <button type="button" id="closeGenerateBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script type="module" src="/static/js/api.js"></script>
+  <script type="module" src="/static/js/auth.js"></script>
+  <script type="module" src="/static/js/payroll.js"></script>
+</body>
+</html>
