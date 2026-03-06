@@ -144,3 +144,98 @@ button.danger {
   justify-content: flex-end;
   gap: 10px;
 }
+
+.month-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.month-card {
+  width: 120px;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-weight: bold;
+}
+
+.month-card.paid {
+  background-color: #28a745;
+  color: white;
+}
+
+.month-card.unpaid {
+  background-color: #007bff;
+  color: white;
+}
+
+.month-card.locked {
+  background-color: #dcdcdc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.month-card:hover:not(.locked) {
+  transform: scale(1.05);
+}
+
+.filter-row {
+  margin-bottom: 15px;
+}
+
+.filter-row button {
+  margin-right: 10px;
+  padding: 6px 12px;
+}
+
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-badge.PAID {
+    background: #28a745;
+    color: white;
+}
+
+.status-badge.PENDING {
+    background: #dc3545;
+    color: white;
+}
+
+.status-badge.UNPAID {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-generate {
+    background: #ff7a00;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-mark {
+    background: #28a745;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-view {
+    background: #007bff;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+}

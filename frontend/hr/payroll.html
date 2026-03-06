@@ -5,38 +5,11 @@
   <title>HR - Payrolls</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Main CSS -->
   <link rel="stylesheet" href="/static/css/style.css" />
-
-  <!-- (Optional) Basic inline style for modal if not in CSS -->
-  <style>
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .modal-box {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      width: 320px;
-    }
-    .modal-box input, .modal-box select {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 8px;
-    }
-    .modal-box button {
-      margin-right: 8px;
-    }
-  </style>
 </head>
 <body>
   <div class="layout">
+
     <!-- Sidebar -->
     <aside class="sidebar">
       <h2>HR Panel</h2>
@@ -50,53 +23,47 @@
 
     <!-- Main Content -->
     <main class="content">
-      <div class="header-row">
-        <h2>Payrolls</h2>
-        <button id="showGenerateBtn">+ Generate Payroll</button>
+
+      <h2>Payroll Overview</h2>
+
+      <!-- Month Cards -->
+      <div id="month-cards" class="month-container"></div>
+
+      <hr style="margin: 25px 0;" />
+
+      <!-- Selected Month -->
+      <h3 id="selected-month-title">Select a month</h3>
+
+      <!-- Filters -->
+      <div class="filter-row">
+        <button onclick="filterEmployees('ALL')">All</button>
+        <button onclick="filterEmployees('PAID')">Paid</button>
+        <button onclick="filterEmployees('PENDING')">Unpaid</button>
+        <button onclick="generateAllUnpaid()" class="generate-all-btn">
+          Generate All Unpaid Slips
+        </button>
       </div>
 
+      <!-- Employee Table -->
       <table>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Employee</th>
-            <th>Month</th>
-            <th>Year</th>
-            <th>Net Salary</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th>Salary Slip</th>
           </tr>
         </thead>
-        <tbody id="payrollTable">
+        <tbody id="employee-table-body">
           <tr>
-            <td colspan="7">Loading...</td>
+            <td colspan="3">Select a month to view employees</td>
           </tr>
         </tbody>
       </table>
+
     </main>
   </div>
 
-  <!-- Generate Payroll Modal -->
-  <div id="generateModal" class="modal-backdrop">
-    <div class="modal-box">
-      <h3>Generate Payroll</h3>
-      <form id="generateForm">
-        <select id="payEmployee" required>
-          <option value="">Select Employee</option>
-        </select>
-
-        <input type="number" id="payMonth" placeholder="Month (1-12)" min="1" max="12" required />
-        <input type="number" id="payYear" placeholder="Year (e.g. 2026)" required />
-
-        <div style="margin-top: 10px;">
-          <button type="submit">Generate</button>
-          <button type="button" id="closeGenerateBtn">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- JS -->
+  <!-- Scripts -->
   <script type="module" src="/static/js/api.js"></script>
   <script type="module" src="/static/js/auth.js"></script>
   <script type="module" src="/static/js/payroll.js"></script>

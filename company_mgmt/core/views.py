@@ -2,11 +2,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 from .models import Organization, EmployeeProfile,Payroll
 from .serializers import OrganizationSerializer, EmployeeCreateSerializer, EmployeeProfileSerializer,PayrollSerializer
 from .utils import generate_payroll_pdf, send_salary_email
 from django.http import HttpResponse
 from reportlab.lib.pagesizes import A4
+from datetime import datetime
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 
@@ -189,10 +191,44 @@ class HRPayrollListView(APIView):
 
     def get(self, request):
         org = request.user.organization
-        payrolls = Payroll.objects.filter(employee__organization=org).order_by("-year", "-month")
-        serializer = PayrollSerializer(payrolls, many=True)
-        return Response(serializer.data)
+        month = request.GET.get("month")
+        year = request.GET.get("year")
 
+        if not month or not year:
+            return Response({"detail": "month and year required"}, status=400)
+
+        employees = EmployeeProfile.objects.filter(organization=org)
+
+        response_data = []
+
+        for emp in employees:
+            payroll = Payroll.objects.filter(
+                employee=emp,
+                month=month,
+                year=year
+            ).first()
+
+            if payroll:
+                response_data.append({
+                    "employee_id": emp.id,
+                    "employee_name": emp.user.full_name or emp.user.email,
+                    "status": payroll.status,
+                    "net_salary": payroll.net_salary,
+                    "payroll_id": payroll.id,
+                    "pdf_file": payroll.pdf_file.url if payroll.pdf_file else None
+                })
+            else:
+                response_data.append({
+                    "employee_id": emp.id,
+                    "employee_name": emp.user.full_name or emp.user.email,
+                    "status": "UNPAID",
+                    "net_salary": None,
+                    "payroll_id": None,
+                    "pdf_file": None
+                })
+
+        return Response(response_data)
+    
 
 class HRMarkPayrollPaidView(APIView):
     def post(self, request, payroll_id):
@@ -235,4 +271,46 @@ class MyPayrollListView(APIView):
         payrolls = Payroll.objects.filter(employee=profile).order_by("-year", "-month")
         serializer = PayrollSerializer(payrolls, many=True, context={"request": request})
         return Response(serializer.data)
+    
 
+@api_view(['GET'])
+def month_status_view(request):
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+
+    months = [
+        "January","February","March","April","May","June",
+        "July","August","September","October","November","December"
+    ]
+
+    response_data = []
+
+    for index, month_name in enumerate(months, start=1):
+
+        if index > current_month:
+            month_status = "locked"
+        else:
+            payrolls = Payroll.objects.filter(
+                month=index,
+                year=current_year
+            )
+
+            # If no payrolls created yet → treat as unpaid
+            if not payrolls.exists():
+                month_status = "unpaid"
+
+            # If all payrolls are PAID
+            elif payrolls.filter(status="PAID").count() == payrolls.count():
+                month_status = "paid"
+
+            # Otherwise pending exists
+            else:
+                month_status = "unpaid"
+
+        response_data.append({
+            "month_number": index,
+            "month_name": month_name,
+            "status": month_status
+        })
+
+    return Response(response_data)

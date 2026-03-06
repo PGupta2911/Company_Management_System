@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (MyOrganizationView, HRCreateEmployeeView, HREmployeeListView, MyEmployeeProfileView,
                      HRGeneratePayrollView,HRPayrollListView,HRMarkPayrollPaidView,MyPayrollListView,
-                     HRDeleteEmployeeView,HRDashboardStatsView)
+                     HRDeleteEmployeeView,HRDashboardStatsView,month_status_view)
 
 urlpatterns = [
     path("my-organization/", MyOrganizationView.as_view(), name="my-organization"),
@@ -18,6 +18,7 @@ urlpatterns = [
     path("payrolls/<int:payroll_id>/mark-paid/", HRMarkPayrollPaidView.as_view(), name="hr-mark-paid"),
     path("payrolls/me/", MyPayrollListView.as_view(), name="employee-payroll-list"),
     path("dashboard/stats/", HRDashboardStatsView.as_view(), name="hr-dashboard-stats"),
+    path('month-status/', month_status_view, name='month_status'),
 
 
 ]

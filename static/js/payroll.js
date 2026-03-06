@@ -1,156 +1,269 @@
-import { apiRequest } from "./api.js";
-import { requireAuth, logout } from "./auth.js";
+// ===== CONFIG =====
+const API_BASE = "/api/core";
+const CURRENT_YEAR = new Date().getFullYear();
 
-requireAuth();
-document.getElementById("logoutBtn")?.addEventListener("click", logout);
+let selectedMonth = null;
+let selectedMonthName = null;
 
-// Elements
-const payrollTable = document.getElementById("payrollTable");
-const showGenerateBtn = document.getElementById("showGenerateBtn");
-const closeGenerateBtn = document.getElementById("closeGenerateBtn");
-const generateModal = document.getElementById("generateModal");
-const generateForm = document.getElementById("generateForm");
-const payEmployeeSelect = document.getElementById("payEmployee");
 
-// ================= Load Payrolls =================
-async function loadPayrolls() {
-  payrollTable.innerHTML = `<tr><td colspan="7">Loading...</td></tr>`;
-
-  try {
-    const payrolls = await apiRequest("http://127.0.0.1:8000/api/core/payrolls/");
-
-    payrollTable.innerHTML = "";
-
-    if (!payrolls || payrolls.length === 0) {
-      payrollTable.innerHTML = `<tr><td colspan="7">No payrolls found</td></tr>`;
-      return;
-    }
-
-    payrolls.forEach((p) => {
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${p.id}</td>
-        <td>${p.employee_email || "-"}</td>
-        <td>${p.month}</td>
-        <td>${p.year}</td>
-        <td>${p.net_salary}</td>
-        <td>${p.status}</td>
-        <td>
-          ${
-            p.status !== "PAID"
-              ? `<button class="markPaidBtn" data-id="${p.id}">Mark Paid</button>`
-              : `<span class="badge badge-success">Paid</span>`
-          }
-        </td>
-      `;
-
-      payrollTable.appendChild(tr);
-    });
-  } catch (err) {
-    console.error(err);
-    payrollTable.innerHTML = `<tr><td colspan="7">Error loading payrolls</td></tr>`;
-  }
+// ===== AUTH HEADER =====
+function authHeader() {
+    const token = localStorage.getItem("access");
+    return {
+        "Authorization": `Bearer ${token}`
+    };
 }
 
-// ================= Load Employees for Dropdown =================
-async function loadEmployeesForDropdown() {
-  try {
-    const employees = await apiRequest("http://127.0.0.1:8000/api/core/employees/");
 
-    payEmployeeSelect.innerHTML = `<option value="">Select Employee</option>`;
+// ===== LOAD MONTH CARDS =====
+async function loadMonthCards() {
+    try {
+        const response = await fetch(`${API_BASE}/month-status/`, {
+            headers: authHeader()
+        });
 
-    employees.forEach((emp) => {
-      const opt = document.createElement("option");
-      opt.value = emp.id;
-      opt.textContent = `${emp.user_email || emp.email || "Employee"} (${emp.id})`;
-      payEmployeeSelect.appendChild(opt);
-    });
-  } catch (err) {
-    console.error("Failed to load employees", err);
-  }
+        if (!response.ok) {
+            console.error("Failed to load month status");
+            return;
+        }
+
+        const months = await response.json();
+        const container = document.getElementById("month-cards");
+        container.innerHTML = "";
+
+        months.forEach(month => {
+
+            const card = document.createElement("div");
+            card.classList.add("month-card");
+
+            card.innerHTML = `
+                <h4>${month.month_name}</h4>
+                <p>${month.status.toUpperCase()}</p>
+            `;
+
+            // Status styling
+            if (month.status === "paid") {
+                card.classList.add("paid");
+            } else if (month.status === "unpaid") {
+                card.classList.add("unpaid");
+            } else {
+                card.classList.add("locked");
+            }
+
+            // Make ALL non-locked months clickable
+            if (month.status !== "locked") {
+                card.onclick = () => {
+                    selectedMonth = month.month_number;
+                    selectedMonthName = month.month_name;
+
+                    document.querySelectorAll(".month-card")
+                        .forEach(c => c.classList.remove("active"));
+
+                    card.classList.add("active");
+
+                    loadPayrollsForMonth(selectedMonth, selectedMonthName);
+                };
+            }
+
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Month load error:", error);
+    }
 }
 
-// ================= Modal Logic =================
-showGenerateBtn?.addEventListener("click", () => {
-  generateModal.style.display = "flex";
-  loadEmployeesForDropdown();
-});
 
-closeGenerateBtn?.addEventListener("click", () => {
-  generateModal.style.display = "none";
-  generateForm.reset();
-});
+// ===== LOAD PAYROLLS FOR MONTH =====
+async function loadPayrollsForMonth(month, monthName) {
 
-// ================= Generate Payroll =================
-generateForm?.addEventListener("submit", async (e) => {
-  e.preventDefault();
+    document.getElementById("selected-month-title").innerText =
+        `Employee List - ${monthName}`;
 
-  const payload = {
-    employee_id: payEmployeeSelect.value,
-    month: document.getElementById("payMonth").value,
-    year: document.getElementById("payYear").value,
-  };
+    try {
+        const response = await fetch(
+            `${API_BASE}/payrolls/?month=${month}&year=${CURRENT_YEAR}`,
+            { headers: authHeader() }
+        );
 
-  try {
-    await apiRequest("http://127.0.0.1:8000/api/core/payrolls/generate/", {
-      method: "POST",
-      body: JSON.stringify(payload),
+        if (!response.ok) {
+            console.error("Payroll fetch failed");
+            return;
+        }
+
+        const data = await response.json();
+        renderEmployeeTable(data);
+
+    } catch (error) {
+        console.error("Payroll load error:", error);
+    }
+}
+
+
+// ===== RENDER TABLE =====
+function renderEmployeeTable(data) {
+
+    const tableBody = document.getElementById("employee-table-body");
+    tableBody.innerHTML = "";
+
+    if (!data.length) {
+        tableBody.innerHTML =
+            `<tr><td colspan="3">No employees found</td></tr>`;
+        return;
+    }
+
+    data.forEach(emp => {
+
+        const row = document.createElement("tr");
+        row.dataset.status = emp.status;
+
+        let actionHtml = "";
+
+        if (!emp.payroll_id) {
+            actionHtml = `
+                <button class="btn-generate"
+                    onclick="generatePayroll(${emp.employee_id})">
+                    Generate Slip
+                </button>
+            `;
+        }
+        else if (emp.status === "PENDING") {
+            actionHtml = `
+                <button class="btn-mark"
+                    onclick="markAsPaid(${emp.payroll_id})">
+                    Mark Paid
+                </button>
+            `;
+        }
+        else if (emp.status === "PAID") {
+            actionHtml = `
+                <a href="${emp.pdf_file}"
+                   target="_blank"
+                   class="btn-view">
+                   View Slip
+                </a>
+            `;
+        }
+
+        row.innerHTML = `
+            <td>${emp.employee_name}</td>
+            <td>
+                <span class="status-badge ${emp.status}">
+                    ${emp.status}
+                </span>
+            </td>
+            <td>${actionHtml}</td>
+        `;
+
+        tableBody.appendChild(row);
     });
+}
 
-    alert("Payroll generated successfully");
-    generateModal.style.display = "none";
-    generateForm.reset();
-    loadPayrolls();
-  } catch (err) {
-    console.error(err);
-    alert("Failed to generate payroll");
-  }
-});
 
-// ================= Table Actions (Mark Paid / Delete) =================
-payrollTable?.addEventListener("click", async (e) => {
-  const markBtn = e.target.closest(".markPaidBtn");
-  const delBtn = e.target.closest(".deletePayrollBtn");
-
-  // ---- Mark Paid ----
-  if (markBtn) {
-    const id = markBtn.getAttribute("data-id");
-
-    if (!confirm("Mark this payroll as PAID?")) return;
+// ===== GENERATE PAYROLL =====
+async function generatePayroll(employeeId) {
 
     try {
-      await apiRequest(`http://127.0.0.1:8000/api/core/payrolls/${id}/mark-paid/`, {
-        method: "POST",
-      });
+        const response = await fetch(
+            `${API_BASE}/payrolls/generate/`,
+            {
+                method: "POST",
+                headers: {
+                    ...authHeader(),
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    employee_id: employeeId,
+                    month: selectedMonth,
+                    year: CURRENT_YEAR
+                })
+            }
+        );
 
-      alert("Payroll marked as PAID");
-      loadPayrolls();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to mark paid");
+        const result = await response.json();
+        alert(result.detail || "Payroll generated");
+
+        loadPayrollsForMonth(selectedMonth, selectedMonthName);
+        loadMonthCards();
+
+    } catch (error) {
+        console.error("Generate error:", error);
     }
-  }
+}
 
-  // ---- Delete Payroll ----
-  if (delBtn) {
-    const id = delBtn.getAttribute("data-id");
 
-    if (!confirm("Are you sure you want to delete this payroll?")) return;
+// ===== MARK AS PAID =====
+async function markAsPaid(payrollId) {
 
     try {
-      await apiRequest(`http://127.0.0.1:8000/api/core/payrolls/${id}/`, {
-        method: "DELETE",
-      });
+        const response = await fetch(
+            `${API_BASE}/payrolls/${payrollId}/mark-paid/`,
+            {
+                method: "POST",
+                headers: authHeader()
+            }
+        );
 
-      alert("Payroll deleted");
-      loadPayrolls();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to delete payroll");
+        const result = await response.json();
+        alert(result.message || "Marked as paid");
+
+        loadPayrollsForMonth(selectedMonth, selectedMonthName);
+        loadMonthCards();
+
+    } catch (error) {
+        console.error("Mark paid error:", error);
     }
-  }
-});
+}
 
-// ================= Initial Load =================
-loadPayrolls();
+
+// ===== FILTER =====
+function filterEmployees(type) {
+
+    const rows = document.querySelectorAll("#employee-table-body tr");
+
+    rows.forEach(row => {
+
+        const status = row.dataset.status;
+
+        if (type === "ALL") {
+            row.style.display = "";
+        }
+        else if (status && status.toUpperCase() === type.toUpperCase()) {
+            row.style.display = "";
+        }
+        else {
+            row.style.display = "none";
+        }
+
+    });
+}
+
+
+// ===== GENERATE ALL UNPAID =====
+async function generateAllUnpaid() {
+
+    if (!selectedMonth) {
+        alert("Select a month first");
+        return;
+    }
+
+    const rows = document.querySelectorAll("#employee-table-body tr");
+
+    for (const row of rows) {
+        if (row.dataset.status === "UNPAID") {
+            const btn = row.querySelector(".btn-generate");
+            if (btn) btn.click();
+        }
+    }
+}
+
+
+// ===== INIT =====
+document.addEventListener("DOMContentLoaded", loadMonthCards);
+
+
+// expose globally
+window.filterEmployees = filterEmployees;
+window.generateAllUnpaid = generateAllUnpaid;
+window.markAsPaid = markAsPaid;
+window.generatePayroll = generatePayroll;
