@@ -4,68 +4,83 @@
   <meta charset="UTF-8" />
   <title>HR - Payrolls</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <link rel="stylesheet" href="/static/css/style.css" />
 </head>
+
 <body>
-  <div class="layout">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h2>HR Panel</h2>
-      <nav>
-        <a href="/hr/dashboard/">Dashboard</a>
-        <a href="/hr/employees/">Employees</a>
-        <a class="active" href="/hr/payrolls/">Payrolls</a>
-        <button id="logoutBtn">Logout</button>
-      </nav>
-    </aside>
+<div class="layout">
 
-    <!-- Main Content -->
-    <main class="content">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>HR Panel</h2>
 
-      <h2>Payroll Overview</h2>
+    <nav>
+      <a href="/hr/dashboard/">Dashboard</a>
+      <a href="/hr/employees/">Employees</a>
+      <a class="active" href="/hr/payrolls/">Payrolls</a>
 
-      <!-- Month Cards -->
-      <div id="month-cards" class="month-container"></div>
+      <button id="logoutBtn">Logout</button>
+    </nav>
+  </aside>
 
-      <hr style="margin: 25px 0;" />
 
-      <!-- Selected Month -->
-      <h3 id="selected-month-title">Select a month</h3>
+  <!-- Main Content -->
+  <main class="main payroll-page">
 
-      <!-- Filters -->
-      <div class="filter-row">
-        <button onclick="filterEmployees('ALL')">All</button>
-        <button onclick="filterEmployees('PAID')">Paid</button>
-        <button onclick="filterEmployees('PENDING')">Unpaid</button>
-        <button onclick="generateAllUnpaid()" class="generate-all-btn">
-          Generate All Unpaid Slips
-        </button>
+    <h2>Payroll Overview</h2>
+
+    <!-- Month Cards -->
+    <div id="month-cards" class="month-container"></div>
+
+    <hr style="margin: 25px 0;" />
+
+    <!-- Filters -->
+    <h3 id="selected-month-title">Select a month</h3>
+
+    <div class="filter-bar">
+
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="filterEmployees('ALL')">All</button>
+        <button class="filter-btn" onclick="filterEmployees('PAID')">Paid</button>
+        <button class="filter-btn" onclick="filterEmployees('UNPAID')">Unpaid</button>
       </div>
 
-      <!-- Employee Table -->
-      <table>
-        <thead>
-          <tr>
-            <th>Employee</th>
-            <th>Status</th>
-            <th>Salary Slip</th>
-          </tr>
-        </thead>
-        <tbody id="employee-table-body">
-          <tr>
-            <td colspan="3">Select a month to view employees</td>
-          </tr>
-        </tbody>
-      </table>
+      <button class="generate-btn" onclick="generateAllUnpaid()">
+        Generate Unpaid Slips
+      </button>
 
-    </main>
-  </div>
+    </div>
 
-  <!-- Scripts -->
-  <script type="module" src="/static/js/api.js"></script>
-  <script type="module" src="/static/js/auth.js"></script>
-  <script type="module" src="/static/js/payroll.js"></script>
+
+    <!-- Table -->
+    <table>
+
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Status</th>
+          <th>Salary Slip</th>
+        </tr>
+      </thead>
+
+      <tbody id="employee-table-body">
+        <tr>
+          <td colspan="3">Select a month to view employees</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </main>
+
+</div>
+
+<script type="module" src="/static/js/api.js"></script>
+<script type="module" src="/static/js/auth.js"></script>
+<script type="module" src="/static/js/payroll.js"></script>
+
 </body>
 </html>

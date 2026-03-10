@@ -35,10 +35,13 @@
         </tbody>
       </table>
       <div id="employeeModal" class="modal">
-        <div class="modal-content">
-            <h3>Add Employee</h3>
 
-            <form id="addEmployeeForm">
+        <div class="modal-content employee-modal">
+
+          <h3>Add Employee</h3>
+
+          <form id="addEmployeeForm">
+
             <input type="text" id="empFullName" placeholder="Full Name" required />
             <input type="email" id="empEmail" placeholder="Email" required />
             <input type="password" id="empPassword" placeholder="Temporary Password" required />
@@ -48,12 +51,15 @@
             <input type="number" id="empDeduction" placeholder="Deduction" value="0" />
 
             <div class="modal-actions">
-                <button type="submit">Save</button>
-                <button type="button" id="closeModalBtn">Cancel</button>
+              <button type="submit">Save</button>
+              <button type="button" id="closeModalBtn">Cancel</button>
             </div>
-            </form>
+
+          </form>
+
         </div>
-        </div>
+
+      </div>
     </div>
   </div>
 </body>

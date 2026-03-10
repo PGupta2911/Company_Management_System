@@ -119,29 +119,41 @@ function renderEmployeeTable(data) {
 
         let actionHtml = "";
 
+/* UNPAID → Generate Slip */
         if (!emp.payroll_id) {
             actionHtml = `
-                <button class="btn-generate"
-                    onclick="generatePayroll(${emp.employee_id})">
-                    Generate Slip
-                </button>
+                <div class="tooltip">
+                    <button class="btn-generate-icon"
+                        onclick="generatePayroll(${emp.employee_id})">
+                        <i class="fa-solid fa-bolt"></i>
+                    </button>
+                    <span class="tooltip-text">Generate Slip</span>
+                </div>
             `;
         }
+
+        /* PENDING → Mark Paid */
         else if (emp.status === "PENDING") {
             actionHtml = `
-                <button class="btn-mark"
-                    onclick="markAsPaid(${emp.payroll_id})">
-                    Mark Paid
-                </button>
+                <div class="tooltip">
+                    <button class="btn-mark-icon"
+                        onclick="markAsPaid(${emp.payroll_id})">
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+                    <span class="tooltip-text">Mark Paid</span>
+                </div>
             `;
         }
+
+        /* PAID → View Slip */
         else if (emp.status === "PAID") {
             actionHtml = `
-                <a href="${emp.pdf_file}"
-                   target="_blank"
-                   class="btn-view">
-                   View Slip
-                </a>
+                <div class="tooltip">
+                    <a href="${emp.pdf_file}" target="_blank" class="btn-view-icon">
+                        <i class="fa-regular fa-eye"></i>
+                    </a>
+                    <span class="tooltip-text">View Slip</span>
+                </div>
             `;
         }
 
@@ -219,23 +231,24 @@ async function markAsPaid(payrollId) {
 // ===== FILTER =====
 function filterEmployees(type) {
 
+    document.querySelectorAll(".filter-btn").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    event.target.classList.add("active");
+
     const rows = document.querySelectorAll("#employee-table-body tr");
 
-    rows.forEach(row => {
-
+    rows.forEach(row=>{
         const status = row.dataset.status;
 
-        if (type === "ALL") {
-            row.style.display = "";
+        if(type==="ALL" || status===type){
+            row.style.display="";
+        }else{
+            row.style.display="none";
         }
-        else if (status && status.toUpperCase() === type.toUpperCase()) {
-            row.style.display = "";
-        }
-        else {
-            row.style.display = "none";
-        }
-
     });
+
 }
 
 

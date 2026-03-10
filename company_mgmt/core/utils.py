@@ -5,6 +5,7 @@ from reportlab.lib import colors
 from reportlab.pdfgen import canvas
 from django.utils import timezone
 from django.core.mail import EmailMessage
+from reportlab.platypus import Table, TableStyle
 
 
 
@@ -21,61 +22,113 @@ def generate_payroll_pdf(payroll):
     employee = payroll.employee
     user = employee.user
 
-    # ===== Header =====
-    c.setFillColor(colors.HexColor("#1f4fd8"))
-    c.rect(0, height - 80, width, 80, fill=1)
+    # ================= HEADER =================
+
+    c.setFillColor(colors.HexColor("#2563eb"))
+    c.rect(0, height - 90, width, 90, fill=1)
 
     c.setFillColor(colors.white)
     c.setFont("Helvetica-Bold", 22)
-    c.drawString(40, height - 50, "Company Management System")
+    c.drawString(40, height - 55, "Company Management System")
+
     c.setFont("Helvetica", 12)
-    c.drawString(40, height - 70, "Salary Slip")
+    c.drawString(40, height - 75, "Employee Salary Slip")
 
-    # ===== Body =====
-    y = height - 120
+    # ================= EMPLOYEE INFO =================
+
+    y = height - 130
+
     c.setFillColor(colors.black)
+    c.setFont("Helvetica-Bold", 13)
+    c.drawString(40, y, "Employee Information")
+
+    y -= 20
+    c.line(40, y, width - 40, y)
+
+    y -= 25
     c.setFont("Helvetica", 11)
 
-    c.drawString(40, y, f"Employee Email: {user.email}")
-    y -= 20
-    c.drawString(40, y, f"Position: {employee.position}")
-    y -= 20
-    c.drawString(40, y, f"Month / Year: {payroll.month} / {payroll.year}")
-    y -= 30
+    c.drawString(40, y, f"Employee Email:")
+    c.drawString(200, y, f"{user.email}")
 
-    # Line
+    y -= 20
+    c.drawString(40, y, f"Position:")
+    c.drawString(200, y, f"{employee.position}")
+
+    y -= 20
+    c.drawString(40, y, f"Month / Year:")
+    c.drawString(200, y, f"{payroll.month} / {payroll.year}")
+
+    y -= 40
+
+    # ================= SALARY TABLE =================
+
+    c.setFont("Helvetica-Bold", 13)
+    c.drawString(40, y, "Salary Breakdown")
+
+    y -= 20
     c.line(40, y, width - 40, y)
-    y -= 30
 
-    # Salary Details Box
-    c.setFont("Helvetica-Bold", 12)
-    c.drawString(40, y, "Salary Details")
-    y -= 20
+    y -= 25
 
-    c.setFont("Helvetica", 11)
-    c.drawString(60, y, f"Basic Salary: {payroll.base_salary}")
-    y -= 20
-    c.drawString(60, y, f"Allowance: {payroll.allowance}")
-    y -= 20
-    c.drawString(60, y, f"Deduction: {payroll.deduction}")
-    y -= 20
+    table_data = [
+        ["Component", "Amount"],
+        ["Basic Salary", f"₹ {payroll.base_salary}"],
+        ["Allowance", f"₹ {payroll.allowance}"],
+        ["Deduction", f"₹ {payroll.deduction}"],
+    ]
 
-    c.line(40, y, width - 40, y)
-    y -= 30
+    table = Table(table_data, colWidths=[300, 200])
 
-    # Net Salary Highlight
+    style = TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#f1f5f9")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.black),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("ALIGN", (1, 1), (1, -1), "RIGHT"),
+        ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+    ])
+
+    table.setStyle(style)
+
+    table.wrapOn(c, width, height)
+    table.drawOn(c, 40, y - 100)
+
+    y -= 140
+
+    # ================= NET SALARY BOX =================
+
+    c.setFillColor(colors.HexColor("#ecfdf5"))
+    c.rect(40, y - 20, width - 80, 40, fill=1, stroke=0)
+
+    c.setFillColor(colors.HexColor("#16a34a"))
     c.setFont("Helvetica-Bold", 14)
-    c.setFillColor(colors.HexColor("#0a7d2c"))
-    c.drawString(40, y, f"Net Salary: {payroll.net_salary}")
-    y -= 30
+
+    c.drawString(50, y, f"Net Salary : ₹ {payroll.net_salary}")
+
+    y -= 50
+
+    # ================= PAYMENT INFO =================
 
     c.setFillColor(colors.black)
-    c.setFont("Helvetica", 10)
-    c.drawString(40, y, f"Paid At: {timezone.now().strftime('%d-%m-%Y %H:%M')}")
+    c.setFont("Helvetica", 11)
 
-    # Footer
+    c.drawString(
+        40,
+        y,
+        f"Payment Date : {timezone.now().strftime('%d %B %Y %H:%M')}"
+    )
+
+    # ================= FOOTER =================
+
     c.setFont("Helvetica-Oblique", 9)
-    c.drawString(40, 40, "This is a system generated salary slip. No signature required.")
+    c.setFillColor(colors.grey)
+
+    c.drawString(
+        40,
+        40,
+        "This is a system generated salary slip. No signature required."
+    )
 
     c.showPage()
     c.save()
