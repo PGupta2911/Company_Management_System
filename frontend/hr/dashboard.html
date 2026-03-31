@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script type="module" src="{% static 'js/hr_dashboard.js' %}"></script>
+</head>
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <h2>HR Panel</h2>
+
+            <a href="/hr/dashboard/">Dashboard</a>
+            <a href="/hr/employees/">Employees</a>
+            <a href="/hr/payrolls/">Payrolls</a>
+            <a href="/hr/attendance/">Attendance</a>
+            <a href="/hr/leaves/">Leaves</a>
+
+            <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+
+        <div class="main">
+
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h2>Dashboard</h2>
+                    <p class="subtitle">Overview of your organization</p>
+                </div>
+                <div id="userInfo" class="user-info"></div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+
+                <div class="stat-card blue">
+                    <h4>Total Employees</h4>
+                    <p id="TotalEmployees">-</p>
+                </div>
+
+                <div class="stat-card orange">
+                    <h4>Pending Payrolls</h4>
+                    <p id="pendingPayrolls">-</p>
+                </div>
+
+                <div class="stat-card green">
+                    <h4>Organization</h4>
+                    <p id="orgName">Loading...</p>
+                </div>
+
+            </div>
+
+            <!-- Extra Section (future ready) -->
+            <div class="dashboard-section">
+                <h3>Quick Insights</h3>
+                <p class="muted">More analytics coming soon...</p>
+            </div>
+
+        </div>
+
+        
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Super Admin Dashboard</title>
+
+    <link rel="stylesheet" href="/static/css/superadmin_dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <h2 class="logo">Super Admin</h2>
+
+    <a href="/superadmin/dashboard/" class="nav-link">Dashboard</a>
+
+    <a href="#organizations" class="nav-link">Organizations</a>
+
+    <a href="#" id="logoutBtn" class="nav-link logout">Logout</a>
+
+</div>
+
+
+<div class="main">
+
+    <h1>Dashboard</h1>
+
+    <div class="top-bar">
+
+        <button id="createOrgBtn">
+            + Create Organization
+        </button>
+
+        <input
+            type="text"
+            id="searchOrg"
+            placeholder="Search organization..."
+        >
+
+    </div>
+
+
+    <!-- Stats Cards -->
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Organizations</h3>
+            <p id="org_count">0</p>
+        </div>
+
+        <div class="card">
+            <h3>HR</h3>
+            <p id="hr_count">0</p>
+        </div>
+
+        <div class="card">
+            <h3>Employees</h3>
+            <p id="emp_count">0</p>
+        </div>
+
+        <div class="card">
+            <h3>Payrolls</h3>
+            <p id="pay_count">0</p>
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <div class="analytics-card">
+            <h3>System Analytics</h3>
+            <canvas id="statsChart"></canvas>
+        </div>
+
+        <div class="activity">
+
+            <h3>Recent Activity</h3>
+
+            <div class="activity-item">
+                Organization created
+            </div>
+
+            <div class="activity-item">
+                HR assigned to organization
+            </div>
+
+            <div class="activity-item">
+                Employee added
+            </div>
+
+            <div class="activity-item">
+                Payroll generated
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CREATE ORGANIZATION MODAL -->
+
+    <div id="orgModal" class="modal">
+
+        <div class="modal-content">
+
+            <h2>Create Organization</h2>
+
+            <input id="org_name" placeholder="Organization Name">
+
+            <input id="hr_name" placeholder="HR Full Name">
+
+            <input id="hr_email" placeholder="HR Email">
+
+            <input id="hr_password" type="password" placeholder="HR Password">
+
+            <button id="submitOrg">
+                Create
+            </button>
+
+            <button id="closeModal">
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Organization Table -->
+
+    <h2 id="organizations">Organizations</h2>
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>HR</th>
+                <th>Employees</th>
+                <th>Action</th>
+            </tr>
+
+        </thead>
+
+        <tbody id="org_table"></tbody>
+
+    </table>
+    <!-- EDIT ORGANIZATION MODAL -->
+
+    <div id="editModal" class="modal">
+
+        <div class="modal-content">
+
+            <h2>Edit Organization</h2>
+
+            <input id="edit_org_name" placeholder="Organization Name">
+
+            <input id="edit_hr_name" placeholder="HR Name">
+
+            <input id="edit_hr_email" placeholder="HR Email">
+
+            <button id="updateOrgBtn">
+                Update
+            </button>
+
+            <button onclick="closeEdit()">
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Pagination -->
+
+    <div id="pagination" class="pagination"></div>
+
+</div>
+
+
+<script src="/static/js/superadmin_dashboard.js"></script>
+
+</body>
+</html>

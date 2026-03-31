@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Leave Dashboard</title>
+
+  <link rel="stylesheet" href="/static/css/leave.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="topbar">
+    <div>
+      <h2>Leave Dashboard</h2>
+      <p class="subtitle">Manage your leaves & track approvals</p>
+    </div>
+
+    <button onclick="window.location.href='/employee/dashboard/'">
+      ← Back to Dashboard
+    </button>
+  </div>
+
+  <!-- STATS -->
+  <div class="cards">
+
+    <div class="card blue">
+      <p>Total Leaves</p>
+      <h3 id="total-leaves">0</h3>
+    </div>
+
+    <div class="card green">
+      <p>Remaining</p>
+      <h3 id="remaining-leaves">0</h3>
+    </div>
+
+    <div class="card orange">
+      <p>Salary Deduction</p>
+      <h3 id="salary-deduction">₹0</h3>
+    </div>
+
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="leave-grid">
+
+    <!-- APPLY -->
+    <div class="form-box">
+
+      <h3>Apply Leave</h3>
+
+      <div class="form-group">
+        <label>Leave Type</label>
+        <select id="leave-type">
+          <option value="SICK">Sick</option>
+          <option value="CASUAL">Casual</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Start Date</label>
+          <input type="date" id="start-date">
+        </div>
+
+        <div class="form-group">
+          <label>End Date</label>
+          <input type="date" id="end-date">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Reason</label>
+        <textarea id="reason" placeholder="Enter reason"></textarea>
+      </div>
+
+      <button onclick="applyLeave()" class="apply-btn">
+        Apply Leave
+      </button>
+
+    </div>
+
+    <!-- LEAVE TABLE -->
+    <div class="table-box">
+
+      <div class="table-header">
+        <h3>My Leaves</h3>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Dates</th>
+            <th>Status</th>
+            <th>Payment</th>
+          </tr>
+        </thead>
+
+        <tbody id="leave-table"></tbody>
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="/static/js/leave.js"></script>
+
+</body>
+</html>

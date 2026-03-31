@@ -1,0 +1,90 @@
+.table-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #eef2f7;
+  text-align: left;
+}
+
+td, th {
+  padding: 12px;
+}
+
+/* STATUS */
+.badge {
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: white;
+  font-size: 12px;
+}
+
+.pending { background: orange; }
+.approved { background: green; }
+.rejected { background: red; }
+
+/* BUTTONS */
+.action-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.approve-btn {
+  background: #27ae60;
+  color: white;
+}
+
+.reject-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+/* improve action buttons */
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.approve-btn {
+  background: #22c55e;
+}
+
+.reject-btn {
+  background: #ef4444;
+}
+
+/* hover */
+.approve-btn:hover {
+  background: #16a34a;
+}
+
+.reject-btn:hover {
+  background: #dc2626;
+}
+
+/* table hover */
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  margin-top: 10px;
+  resize: none;
+}

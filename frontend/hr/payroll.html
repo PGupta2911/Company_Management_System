@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HR - Payrolls</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+      <h2>HR Panel</h2>
+
+      <a href="/hr/dashboard/">Dashboard</a>
+      <a href="/hr/employees/">Employees</a>
+      <a href="/hr/payrolls/">Payrolls</a>
+      <a href="/hr/attendance/">Attendance</a>
+      <a href="/hr/leaves/">Leaves</a>
+
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+  </div>
+
+
+  <!-- Main Content -->
+  <main class="main payroll-page">
+
+    <h2>Payroll Overview</h2>
+
+    <!-- Month Cards -->
+    <div id="month-cards" class="month-container"></div>
+
+    <hr style="margin: 25px 0;" />
+
+    <!-- Filters -->
+    <h3 id="selected-month-title">Select a month</h3>
+
+    <div class="filter-bar">
+
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="filterEmployees('ALL')">All</button>
+        <button class="filter-btn" onclick="filterEmployees('PAID')">Paid</button>
+        <button class="filter-btn" onclick="filterEmployees('UNPAID')">Unpaid</button>
+      </div>
+
+      <button class="generate-btn" onclick="generateAllUnpaid()">
+        Generate Unpaid Slips
+      </button>
+
+    </div>
+
+
+    <!-- Table -->
+    <table>
+
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Status</th>
+          <th>Salary Slip</th>
+        </tr>
+      </thead>
+
+      <tbody id="employee-table-body">
+        <tr>
+          <td colspan="3">Select a month to view employees</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </main>
+
+</div>
+
+<script type="module" src="/static/js/api.js"></script>
+<script type="module" src="/static/js/auth.js"></script>
+<script type="module" src="/static/js/payroll.js"></script>
+
+</body>
+</html>

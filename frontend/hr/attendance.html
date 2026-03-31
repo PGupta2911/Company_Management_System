@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HR - Attendance</title>
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script type="module" src="{% static 'js/hr_attendance.js' %}"></script>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+      <h2>HR Panel</h2>
+
+      <a href="/hr/dashboard/">Dashboard</a>
+      <a href="/hr/employees/">Employees</a>
+      <a href="/hr/payrolls/">Payrolls</a>
+      <a href="/hr/attendance/">Attendance</a>
+      <a href="/hr/leaves/">Leaves</a>
+
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    
+
+    <!-- Table -->
+    <div class="table-container">
+
+      <div class="topbar-left">
+        <h2>Attendance Overview</h2>
+        <p class="subtitle">Monthly attendance summary</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+
+        <select id="monthSelect">
+          <option value="1">Jan</option>
+          <option value="2">Feb</option>
+          <option value="3" selected>Mar</option>
+          <option value="4">Apr</option>
+          <option value="5">May</option>
+          <option value="6">Jun</option>
+          <option value="7">Jul</option>
+          <option value="8">Aug</option>
+          <option value="9">Sep</option>
+          <option value="10">Oct</option>
+          <option value="11">Nov</option>
+          <option value="12">Dec</option>
+        </select>
+
+        <select id="yearSelect">
+          <option value="2026">2026</option>
+          <option value="2025">2025</option>
+        </select>
+
+        <button id="loadAttendanceBtn">Load</button>
+
+      </div>
+
+      <!-- Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Present</th>
+            <th>Late</th>
+            <th>Absent</th>
+            <th>Effective Absent</th>
+          </tr>
+        </thead>
+
+        <tbody id="attendanceTable">
+          <tr>
+            <td colspan="5">Select month to load data</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

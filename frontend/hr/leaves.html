@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HR - Leave Management</title>
+
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/hr_leaves.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+      <h2>HR Panel</h2>
+
+      <a href="/hr/dashboard/">Dashboard</a>
+      <a href="/hr/employees/">Employees</a>
+      <a href="/hr/payrolls/">Payrolls</a>
+      <a href="/hr/attendance/">Attendance</a>
+      <a href="/hr/leaves/">Leaves</a>
+
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+  </div>
+
+  <!-- Main -->
+  <main class="main">
+
+    <div class="topbar">
+        <div class="topbar-left">
+            <h2>Leave Requests</h2>
+            <p class="subtitle">Manage employee leave approvals</p>
+        </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filter-bar">
+        <div class="filter-group">
+            <button class="filter-btn active" onclick="filterLeaves('ALL')">All</button>
+            <button class="filter-btn" onclick="filterLeaves('PENDING')">Pending</button>
+            <button class="filter-btn" onclick="filterLeaves('APPROVED')">Approved</button>
+            <button class="filter-btn" onclick="filterLeaves('REJECTED')">Rejected</button>
+        </div>
+    </div>
+
+    <div class="table-box">
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Type</th>
+            <th>Dates</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="leaveTable">
+          <tr>
+            <td colspan="6">Loading...</td>
+          </tr>
+        </tbody>
+
+      </table>
+      <!-- REJECT MODAL -->
+      <div id="rejectModal" class="modal">
+        <div class="modal-content">
+
+          <h3>Reject Leave</h3>
+
+          <textarea id="rejectReason" placeholder="Enter reason..." rows="4"></textarea>
+
+          <div class="modal-actions">
+            <button id="confirmReject">Submit</button>
+            <button id="closeRejectModal">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<script type="module" src="/static/js/hr_leaves.js"></script>
+
+</body>
+</html>

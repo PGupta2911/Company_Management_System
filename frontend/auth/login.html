@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Company Management</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script type="module" src="{% static 'js/login.js' %}"></script>
+</head>
+<body style="display:flex; justify-content:center; align-items:center; height:100vh;">
+
+  <div class="card" style="width:350px;">
+    <h2 style="text-align:center; margin-bottom:20px;">Company Management</h2>
+
+    <input id="email" type="email" placeholder="Email" style="width:100%; padding:10px; margin-bottom:10px;">
+    <input id="password" type="password" placeholder="Password" style="width:100%; padding:10px; margin-bottom:10px;">
+
+    <button id="loginBtn" style="width:100%;">Login</button>
+
+    <p id="error" style="color:red; margin-top:10px; text-align:center;"></p>
+  </div>
+
+</body>
+</html>

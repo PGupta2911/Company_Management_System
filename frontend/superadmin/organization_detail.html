@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Organization Detail</title>
+
+<link rel="stylesheet" href="/static/css/superadmin_dashboard.css">
+<link rel="stylesheet" href="/static/css/organization_detail.css">
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+<h2 class="logo">Super Admin</h2>
+
+<a href="/superadmin/dashboard/" class="nav-link">Dashboard</a>
+
+<a href="/superadmin/dashboard/#organizations" class="nav-link">
+Organizations
+</a>
+
+<a href="#" id="logoutBtn" class="nav-link logout">
+Logout
+</a>
+
+</div>
+
+
+<!-- Main Content -->
+
+<div class="main">
+
+<div class="header">
+<h1 id="org_name">Organization</h1>
+</div>
+
+
+<!-- Stats -->
+
+<div class="stats">
+
+<div class="card">
+<h3>HR Name</h3>
+<p id="hr_name">-</p>
+</div>
+
+<div class="card">
+<h3>HR Email</h3>
+<p id="hr_email">-</p>
+</div>
+
+<div class="card">
+<h3>Total Employees</h3>
+<p id="employee_count">0</p>
+</div>
+
+<div class="card">
+<h3>Total Payrolls</h3>
+<p id="payroll_count">0</p>
+</div>
+
+</div>
+
+
+<!-- Employees -->
+
+<div class="table-section">
+
+<h2>Employees</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Email</th>
+</tr>
+</thead>
+
+<tbody id="employee_table"></tbody>
+
+</table>
+
+</div>
+
+
+<!-- Payrolls -->
+
+<div class="table-section">
+
+<h2>Payrolls</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Month</th>
+<th>Year</th>
+<th>Net Salary</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody id="payroll_table"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script src="/static/js/organization_detail.js"></script>
+
+</body>
+</html>

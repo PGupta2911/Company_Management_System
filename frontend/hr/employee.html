@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HR - Employees</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script type="module" src="{% static 'js/hr_employee_management.js' %}"></script>
+</head>
+<body>
+  <div class="layout">
+    <div class="sidebar">
+        <h2>HR Panel</h2>
+
+        <a href="/hr/dashboard/">Dashboard</a>
+        <a href="/hr/employees/">Employees</a>
+        <a href="/hr/payrolls/">Payrolls</a>
+        <a href="/hr/attendance/">Attendance</a>
+        <a href="/hr/leaves/">Leaves</a>
+
+        <button id="logoutBtn" class="logout-btn">Logout</button>
+    </div>
+
+    <div class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+            <h2>Employees</h2>
+            <p class="subtitle">Manage your team</p>
+        </div>
+
+        <button id="showAddEmployeeBtn">+ Add Employee</button>
+    </div>
+
+    <div class="table-container">
+
+        <!-- toolbar -->
+        <div class="employee-toolbar">
+            <input type="text" id="searchInput" placeholder="Search employee..." />
+        </div>
+
+        <!-- table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th style="text-align:center;">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="employeeTable">
+                <tr><td colspan="4">Loading...</td></tr>
+            </tbody>
+        </table>
+
+    </div>
+      <div id="employeeModal" class="modal">
+
+        <div class="modal-content employee-modal">
+
+          <h3>Add Employee</h3>
+          <form id="addEmployeeForm">
+
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="empFullName" required />
+            </div>
+
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="empEmail" required />
+            </div>
+
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" id="empPassword" required />
+            </div>
+
+            <div class="form-group">
+              <label>Position</label>
+              <input type="text" id="empPosition" required />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Base Salary</label>
+                <input type="number" id="empBaseSalary" required />
+              </div>
+
+              <div class="form-group">
+                <label>Allowance</label>
+                <input type="number" id="empAllowance" value="0" />
+              </div>
+
+              <div class="form-group">
+                <label>Deduction</label>
+                <input type="number" id="empDeduction" value="0" />
+              </div>
+            </div>
+
+            <div class="modal-actions">
+              <button type="submit">Save Employee</button>
+              <button type="button" id="closeModalBtn">Cancel</button>
+            </div>
+
+          </form>
+
+          
+
+          
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>
