@@ -52,6 +52,11 @@ This system helps organizations manage employees, payroll, attendance, and admin
 - <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/53f2c3ed-73dc-4194-b081-28027b58ccf9" />
 > Displays all organizations with HR and employee count.
 
+<img width="1048" height="298" alt="image" src="https://github.com/user-attachments/assets/c965c990-035f-46bd-a716-5fb86b40e9aa" />
+> Shows detailed structure of a single organization including employees and payroll data.
+
+
+
 
 ---
 
