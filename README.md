@@ -49,6 +49,10 @@ This system helps organizations manage employees, payroll, attendance, and admin
 - Each organization has its own HR and employees
 - Scalable structure for real-world company usage
 
+- <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/53f2c3ed-73dc-4194-b081-28027b58ccf9" />
+> Displays all organizations with HR and employee count.
+
+
 ---
 
 ## 👨‍💼 Employee Management
