@@ -1,4 +1,6 @@
 # 🚀 Company Management System (Django + REST API)
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/eda9a5a6-629f-4f22-85f9-a968af810083" />
+
 
 A full-stack **Role-Based Company Management & Payroll System** built using **Django and Django REST Framework**.
 
